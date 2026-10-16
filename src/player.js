@@ -1,4 +1,4 @@
-import { Gameboard } from './gameboard'
+import { Gameboard } from './gameboard.js'
 
 export class Player {
     constructor (name, computer=false, difficulty='easy') {
@@ -11,18 +11,10 @@ export class Player {
 
     playerAttack(enemyBoard, attackCoords) {
         let attackOutcome = enemyBoard.receiveAttack(attackCoords);
-
-        // Invalid attack
-        if (!attackOutcome) {
-            return false;
+        if (attackOutcome) {
+            this.attacks.push(attackCoords);
         };
-
-        // Valid attack
-        this.attacks.push(attackCoords);
-        if (attackOutcome === 'hit') {
-            return `${this.name} fired at [${attackCoords}] and hit!`;
-        };
-        return `${this.name} missed!`;
+        return attackOutcome;
     };
 
     computerAttack(enemyBoard) {
@@ -56,9 +48,6 @@ export class Player {
 
         // Add coords to hit list & return attack string
         this.attacks.push(attackCoords);
-        if (attackOutcome === 'hit') {
-            return `${this.name} fired at [${attackCoords}] and hit!`;
-        };
-        return `${this.name} missed!`;
+        return attackOutcome;
     };
 };

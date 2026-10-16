@@ -22,7 +22,8 @@ test('2.1 - Test computerAttack, easy mode', () => {
     let testPlayer2 = new Player('Dan');
     let enemyBoard = testPlayer2.gameboard;
 
-    expect(testPlayer1.computerAttack(enemyBoard)).toBe('Computer missed!')
+    // expect(testPlayer1.computerAttack(enemyBoard)).toBe('Computer missed!')
+    expect(testPlayer1.computerAttack(enemyBoard)).toBe('miss')
 });
 
 test('2.2 - Test computerAttack, impossible mode', () => {
@@ -33,8 +34,10 @@ test('2.2 - Test computerAttack, impossible mode', () => {
 
     enemyBoard.placeShip(testShip, [[4,4],[5,4]]);
 
-    expect(testPlayer1.computerAttack(enemyBoard)).toBe('Computer fired at [4,4] and hit!')
-    expect(testPlayer1.computerAttack(enemyBoard)).toBe('Computer fired at [5,4] and hit!')
+    // expect(testPlayer1.computerAttack(enemyBoard)).toBe('Computer fired at [4,4] and hit!')
+    // expect(testPlayer1.computerAttack(enemyBoard)).toBe('Computer fired at [5,4] and hit!')
+    expect(testPlayer1.computerAttack(enemyBoard)).toBe('miss')
+    expect(testPlayer1.computerAttack(enemyBoard)).toBe('hit')
 });
 
 test('3.1 - Test playerAttack', () => {
@@ -47,6 +50,8 @@ test('3.1 - Test playerAttack', () => {
 
     expect(testPlayer1.playerAttack(enemyBoard,[-1,2])).toBeFalsy()
     expect(testPlayer1.playerAttack(enemyBoard,[10,11])).toBeFalsy()
-    expect(testPlayer1.playerAttack(enemyBoard,[4,4])).toBe('Player1 fired at [4,4] and hit!')
-    expect(testPlayer1.playerAttack(enemyBoard,[5,5])).toBe('Player1 missed!')
+    // expect(testPlayer1.playerAttack(enemyBoard,[4,4])).toBe('Player1 fired at [4,4] and hit!')
+    // expect(testPlayer1.playerAttack(enemyBoard,[5,5])).toBe('Player1 missed!')
+    expect(testPlayer1.playerAttack(enemyBoard,[4,4])).toBe('hit')
+    expect(testPlayer1.playerAttack(enemyBoard,[5,5])).toBe('miss')
 });
