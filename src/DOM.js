@@ -1,11 +1,10 @@
-
-
 // Populate grid
 export function renderBoard(gameboardSelector, playerTurn, isInteractive = false) {
     const grid = document.querySelector(gameboardSelector);
     for (let i=0; i<100; i++) {
         // Create cell
         let cell = document.createElement('div');
+        cell.classList.add('cell');
         cell.dataset.row = Math.floor(i/10);
         cell.dataset.col = i%10;
         cell.innerText = `[${cell.dataset.row},${cell.dataset.col}]`;
@@ -27,19 +26,85 @@ export function renderBoard(gameboardSelector, playerTurn, isInteractive = false
     };
 };
 
-export function updateCell(gameboardSelector, row, col, result) {
-    console.log(result);
-    const grid = document.querySelector(gameboardSelector);
+// export function updateCell(gameboardSelector, row, col, result) {
+//     const grid = document.querySelector(gameboardSelector);
+//     if (!grid) return;
+
+//     const cell = grid.querySelector(`[data-row="${row}"][data-col="${col}"]`);
+//     if (!cell) return;
+
+//     cell.innerText = '';
+//     cell.classList.add(`${result}`);
+
+// };
+
+function renderShips(gameboard) {
+    const grid = document.querySelector('#player-board');
     if (!grid) return;
 
-    const cell = grid.querySelector(`[data-row="${row}"][data-col="${col}"]`);
-    if (!cell) return;
-
-    if (result === 'hit') {
-        cell.style.backgroundColor = 'green';
-        cell.innerText = '';
-    } else if (result === 'miss') {
-        cell.style.backgroundColor = 'red';
-        cell.innerText = '';
+    for (let row=0; row<10; row++) {
+        for (let col=0; col<10; col++) {
+            if (gameboard.grid[row][col].ship !== null) {
+                const cell = grid.querySelector(`[data-row="${row}"][data-col="${col}"]`);
+                if (cell) {
+                    cell.innerText = '';
+                    cell.classList.add('ship');
+                };
+            };
+        };
     };
+};
+
+export function refreshBoards(playerGameboard, opponentGameboard) {
+    const fleetBoard = document.querySelector('#player-board');
+    const trackingBoard = document.querySelector('#opponent-board');
+    const cells = document.querySelectorAll('.cell');
+
+    // Clear each gameboard
+    cells.forEach(cell => {
+        cell.classList.remove('miss');
+        cell.classList.remove('hit');
+        cell.classList.remove('ship');
+    });
+
+    // Repaint cells
+    renderShips(playerGameboard);
+    for (let row=0; row<10; row++) {
+        for (let col=0; col<10; col++) {
+            if (playerGameboard.grid[row][col].hit) {
+                const cell = fleetBoard.querySelector(`[data-row="${row}"][data-col="${col}"]`);
+                if (cell && playerGameboard.grid[row][col].ship !== null) {
+                    cell.classList.add('hit');
+                } else if (cell) {
+                    cell.classList.add('miss');
+                };
+            };
+            if (opponentGameboard.grid[row][col].hit) {
+                const cell = trackingBoard.querySelector(`[data-row="${row}"][data-col="${col}"]`);
+                if (cell && opponentGameboard.grid[row][col].ship !== null) {
+                    cell.classList.add('hit');
+                } else if (cell) {
+                    cell.classList.add('miss');
+                };
+            };
+        };
+    };
+
+};
+
+
+
+
+export function renderGameover(winner) {
+    const gameContainer = document.querySelector('.game-container');
+    gameContainer.replaceChildren();
+
+    const gameoverMessage = document.createElement('p');
+    const winnerMessage = document.createElement('p');
+    gameoverMessage.textContent = 'GAMEOVER';
+    gameoverMessage.classList.add('gameover');
+    winnerMessage.textContent = `${winner} wins!`;
+   
+    gameContainer.appendChild(gameoverMessage);
+    gameContainer.appendChild(winnerMessage);
 };

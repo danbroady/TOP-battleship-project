@@ -33,7 +33,7 @@ button {
 
 main {
     margin: 0 auto;
-    height: 100vh;
+    height: 100%;
 }
 
 .grid {
@@ -42,4 +42,31 @@ main {
     width: 800px;
     height: 800px;
     grid-template: repeat(10, 1fr) / repeat(10, 1fr);
+}
+
+
+
+h3 {
+    font-size: 72px;
+}
+
+
+.ship {
+    background-color: grey;
+}
+.hit {
+    background-color: green;
+}
+.miss {
+    background-color: red;
+}
+
+
+
+.gameover {
+    font-size: 72px;
+    color: red;
+    position: absolute;
+    left: 20%;
+    top: 20%;
 }

@@ -16,7 +16,7 @@
 
 import { Player } from './player.js'
 import { Ship } from './ship.js'
-import { renderBoard, updateCell } from './DOM.js'
+import { renderBoard, refreshBoards, renderGameover } from './DOM.js'
 
 let player1;
 let player2;
@@ -33,6 +33,8 @@ function startGame(mode = 'pve') {
         player2 = new Player('Player 2');
     };
     
+    renderBoard('#player-board', null, false);
+    renderBoard('#opponent-board', handlePlayerTurn, true);
 
     // Populate board
     let carrier1 = new Ship(5)
@@ -45,13 +47,10 @@ function startGame(mode = 'pve') {
     let patrol2 = new Ship(2)
     player2.gameboard.placeShip(patrol2, [[7,8],[8,8]]);
 
-    // Render
-    gamePhase = 'combat';
-    renderBoard('#player-board', null, false);
-    renderBoard('#opponent-board', handlePlayerTurn, true);
+    gamePhase = 'combat';    
+    refreshBoards(player1.gameboard, player2.gameboard);
 };
-startGame();
-
+startGame('pvp');
 
 function handlePlayerTurn(row, col) {
     if (gamePhase !== 'combat') return;
@@ -66,18 +65,19 @@ function handlePlayerTurn(row, col) {
 
     if (!result) return;
 
-    console.log(`${attacker.name} aimed at [${row},${col}] with result: ${result}`);
-    updateCell('#opponent-board', row, col, result);
+    // console.log(`${attacker.name} aimed at [${row},${col}] with result: ${result}`);
+    // updateCell('#opponent-board', row, col, result);
+    refreshBoards(attacker.gameboard, defender.gameboard);
     
     // Check for win condition
     if (defender.gameboard.isShipsSunk()) {
         gamePhase = 'gameover';
-        console.log(`${attacker.name} wins!`);
-        return;
+        renderGameover(attacker.name);
     }
 
     // Switch turns
     turnControl = turnControl === 'p1' ? 'p2' : 'p1';
+    refreshBoards(defender.gameboard, attacker.gameboard);
 
     if (turnControl === 'p2' && player2.computer) {
         setTimeout(handleComputerTurn(), 500);
@@ -93,13 +93,13 @@ function handleComputerTurn() {
     let lastAttack = player2.attacks[player2.attacks.length -1];
     let [row,col] = lastAttack;
 
-    console.log(`Computer aimed at [${row},${col}] with result: ${result}`);
-    updateCell('#player-board', row, col, result);
+    // console.log(`Computer aimed at [${row},${col}] with result: ${result}`);
+    // updateCell('#player-board', row, col, result);
+    refreshBoards(player1.gameboard, player2.gameboard);
 
     if (player1.gameboard.isShipsSunk()) {
         gamePhase = 'gameover';
-        console.log(`${player2.name} wins!`);
-        return;
+        renderGameover(player2.name);
     };
 
     turnControl = 'p1';
