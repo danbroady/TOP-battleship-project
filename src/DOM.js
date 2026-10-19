@@ -7,7 +7,7 @@ export function renderBoard(gameboardSelector, playerTurn, isInteractive = false
         cell.classList.add('cell');
         cell.dataset.row = Math.floor(i/10);
         cell.dataset.col = i%10;
-        cell.innerText = `[${cell.dataset.row},${cell.dataset.col}]`;
+        // cell.innerText = `[${cell.dataset.row},${cell.dataset.col}]`;
 
         // Click event listener
         if (isInteractive) {
@@ -25,18 +25,6 @@ export function renderBoard(gameboardSelector, playerTurn, isInteractive = false
         grid.appendChild(cell);
     };
 };
-
-// export function updateCell(gameboardSelector, row, col, result) {
-//     const grid = document.querySelector(gameboardSelector);
-//     if (!grid) return;
-
-//     const cell = grid.querySelector(`[data-row="${row}"][data-col="${col}"]`);
-//     if (!cell) return;
-
-//     cell.innerText = '';
-//     cell.classList.add(`${result}`);
-
-// };
 
 function renderShips(gameboard) {
     const grid = document.querySelector('#player-board');

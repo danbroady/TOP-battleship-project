@@ -1,19 +1,3 @@
-
-
-
-// Initialise game environment
-// - Fleet configuration (Carrier:5, Battleship:4, Destroyer:3, Submarine:3, Patrol boat:2)
-// - Player ship placement phase
-// - Computer ship placement phase
-
-// Turn-based loop
-// - Turn switching, pointer for who's turn
-
-// Error/State handling
-// - Handling false returns for playerAttack()
-// - Check win condition every hit
-
-
 import { Player } from './player.js'
 import { Ship } from './ship.js'
 import { renderBoard, refreshBoards, renderGameover } from './DOM.js'
@@ -50,7 +34,7 @@ function startGame(mode = 'pve') {
     gamePhase = 'combat';    
     refreshBoards(player1.gameboard, player2.gameboard);
 };
-startGame('pvp');
+startGame('pve');
 
 function handlePlayerTurn(row, col) {
     if (gamePhase !== 'combat') return;
@@ -61,12 +45,10 @@ function handlePlayerTurn(row, col) {
 
     if (attacker.computer) return;
 
+    // Place attack (if valid) & render attack onto board
     const result = attacker.playerAttack(defender.gameboard, [row, col]);
-
     if (!result) return;
 
-    // console.log(`${attacker.name} aimed at [${row},${col}] with result: ${result}`);
-    // updateCell('#opponent-board', row, col, result);
     refreshBoards(attacker.gameboard, defender.gameboard);
     
     // Check for win condition
@@ -75,7 +57,7 @@ function handlePlayerTurn(row, col) {
         renderGameover(attacker.name);
     }
 
-    // Switch turns
+    // Switch turns & swap boards
     turnControl = turnControl === 'p1' ? 'p2' : 'p1';
     refreshBoards(defender.gameboard, attacker.gameboard);
 
@@ -87,20 +69,18 @@ function handlePlayerTurn(row, col) {
 function handleComputerTurn() {
     if (gamePhase !== 'combat') return;
 
+    // Place attack (if valid) & render attack onto board
     const result = player2.computerAttack(player1.gameboard);
     if (!result) return;
     
-    let lastAttack = player2.attacks[player2.attacks.length -1];
-    let [row,col] = lastAttack;
-
-    // console.log(`Computer aimed at [${row},${col}] with result: ${result}`);
-    // updateCell('#player-board', row, col, result);
     refreshBoards(player1.gameboard, player2.gameboard);
 
+    // Check for computer win condition
     if (player1.gameboard.isShipsSunk()) {
         gamePhase = 'gameover';
         renderGameover(player2.name);
     };
 
+    // Switch turns
     turnControl = 'p1';
 };
