@@ -31,6 +31,10 @@ button {
 /* Main styling */
 
 body {
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
     background-color: #070b12;
     background-image: 
         radial-gradient(at 50% 0%, rgba(56, 189, 248, 0.08) 0px, transparent 50%),
@@ -40,21 +44,165 @@ body {
     font-family: "JetBrains Mono", monospace;
 }
 
-main {
-    margin: 0 auto;
-    height: 100%;
-    
+header {
+    width: 100%;
+    height: 80px;
+    padding: 15px 20px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    display: flex;
+    justify-content: center;
+
+    background-color: #0f172a;
+    border-bottom: solid 1.5px #1e293b;
+}
+.header-container {
+    width: 100%;
+    max-width: 1400px;
+    gap: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+.header-title {
+    display: flex;
+    flex-direction: row;
+    gap: 10px
+}
+#header-icon {
+    height: 60px;
+}
+h1 {
+    font-size: 48px;
+    font-weight: 700;
+}
+.header-turn {
+    display: flex;
+    gap: 5px;
+    border-radius: 20px;
+    outline: solid 1.5px #1e293b;
+    padding: 10px 15px;
+}
+#header-reset {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    border-radius: 10px;
+    outline: solid 1px #38bdf8;
+    color: #38bdf8;
+    background-color: rgba(30, 41, 59, 0.6);
+    transition: 300ms;
+}
+#header-reset:hover {
+    background-color: rgba(56, 191, 248, 0.187);
 }
 
-.grid-wrapper {
+footer {
+    height: 50px;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin-top: auto;
+
+    border-top: solid 1.5px #1e293b;
+    background-color: #0f172a;
+}
+footer > span > p {
+    color: #8ba0b0;
+    outline: solid 1.5px #1e293b;
+    border-radius: 5px;
+    height: min-content;
+    align-self: center;
+    padding: 3px 15px;
+}
+a {
+    text-decoration: none;
+    color: #38bdf8;
+    font-weight: 800;
+    transition: 300ms;
+}
+a:hover {
+    text-shadow: 0 0 8px #38bdf8;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.game-container {
+    margin: 0 auto;
+    height: 100%;
+    display: flex;
+    flex-flow: wrap;
+    justify-content: center;
+}
+
+.game-card {
+    background-color: #0f172a;
+    margin: 20px;
+    min-width: min-content;
+    width: 100%;
+    max-width: 1200px;
+    border-radius: 16px;
+    padding: 10px 20px;
+    outline: solid 1.5px #1e293b;
+    display: flex;
+    flex: 1 1 420px;
+    flex-direction: column;
+    align-items: center;
+}
+
+.card-title {
+    width: 100%;
+    margin: 0 10px;
+    border-bottom: solid 1.5px #1e293b;
+    display: flex;
+    justify-content: space-between;
+}
+.card-desc {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    width: max-content;
+    height: 50px;
+}
+.card-addon {
+    color: #8ba0b0;
+    outline: solid 1.5px #1e293b;
+    border-radius: 5px;
+    height: min-content;
+    align-self: center;
+    padding: 3px 15px;
+}
+
+.gameboard-icon {
+    height: 22px;
+}
+h3 {
+    font-size: 18px;
+}
+
+
+
+
+.gameboard {
     width: 600px;
     display: grid;
     grid-template-columns: 24px 1fr;
     grid-template-rows: 24px 1fr;
     grid-template-areas:
-    ".    top"
+    ".top"
     "left board";
     gap: 4px;
+    margin: 20px;
 }
 
 .top-labels {
@@ -65,8 +213,8 @@ main {
     align-items: center;
     font-size: 12px;
     color: #94a3b8;
+    margin: 0 4.5px 0 4.5px;
 }
-
 .left-labels {
     grid-area: left;
     display: grid;
@@ -75,53 +223,121 @@ main {
     text-align: center;
     font-size: 12px;
     color: #94a3b8;
+    margin: 4.5px 0 4.5px 0;
+}
+.active-label {
+    transform: scale(1.05);
+    text-shadow: 0 0 5px #38bdf8;
+    color: #ffffff;
+    font-size: 12px;
 }
 
 .grid {
     grid-area: board;
     display: grid;
     grid-template: repeat(10, 1fr) / repeat(10, 1fr);
-    gap: 4px;
-    background: #0f172a;
-    background-size: 20px 20px;
+    background: #070b12;
+    background-size: 18px 18px;
+    background-position: center;
     background-image: 
         linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
         linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-    border-radius: 20px;
+    border-radius: 14px;
     padding: 5px;
-    outline: solid 2px rgba(6, 182, 212, 0.2);
+    outline: solid 1.5px #1e293b;
+    transition: 300ms;
 }
-
-
-
-h3 {
-    font-size: 42px;
+.grid:hover {
+    outline: solid 1.5px rgba(6, 182, 212, 0.2);
 }
 
 
 .cell {
+    cursor: crosshair;
     position: relative;
     aspect-ratio: 1 / 1;
-    background-color: #1e293b;
-    outline: solid 2px rgba(6, 182, 212, 0.2);
-    border-radius: 10px;
+    background-color: #0f172a;
+    outline: solid 1px #1e293b;
+    border-radius: 8px;
     margin: 4.5px;
     font-size: 12px;
     
     display: flex;
     justify-content: center;
     align-items: center;
-
+    transition: 300ms;
 }
+
+.player-cell:not(.hit):not(.miss):not(.ship):hover {
+    background-color: rgba(30, 41, 59, 0.6);
+    outline: solid 1px #334665;
+}
+
+#opponent-board .cell:not(.hit):not(.miss):hover {
+    background-color: rgba(30, 41, 59, 0.6);
+    outline: solid 1px #38bdf8;
+}
+#opponent-board .cell:not(.hit):not(.miss):hover::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 8px;
+    height: 8px;
+    transform: translate(-50%, -50%);
+    background-color: #38bdf8;
+    border-radius: 50%;
+    box-shadow: 0 0 6px #38bdf8;
+}
+
+
 
 .ship {
-    background-color: grey;
+    background-color: rgba(83, 92, 104, 0.583);
+    outline: solid 1px #94a3b8;
+    box-shadow: inset 0 0 8px rgba(148, 163, 184, 0.25);
 }
 .hit {
-    background-color: green;
+    outline: solid 1px #f43f5e;
+    background-color: rgba(244, 63, 94, 0.3);
+    box-shadow: 0 0 6px rgba(244, 63, 94, 0.3);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    text-shadow: 0 0 8px #f43f5e;
 }
+
 .miss {
-    background-color: red;
+    outline: solid 1px #38bdf8;
+    background-color: rgba(56, 189, 248, 0.3);
+}
+.miss::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 10px;
+    height: 10px;
+    transform: translate(-50%, -50%);
+    background-color: #38bdf8;
+    border-radius: 50%;
+    box-shadow: 0 0 6px #38bdf8;
+}
+
+
+table {
+    width: 100%;
+    margin: 10px 0;
+    color: #8ba0b0;
+}
+tr {
+    
+}
+td {
+    border-bottom: solid 1.5px #1e293b;
+    padding: 5px 15px;
 }
 
 

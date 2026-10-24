@@ -8,37 +8,87 @@
     <script type="module" src="./gameControl.js"></script>
 </head>
 <body>
-    <main class="game-container">
-        <div class="gameboard">
-            <h3 class="popup">Friendly waters</h3>
-            <div class="grid-wrapper">
-                <div class="top-labels">
-                    <span>A</span><span>B</span><span>C</span><span>D</span><span>E</span>
-                    <span>F</span><span>G</span><span>H</span><span>I</span><span>J</span>
+    <header>
+        <span class="header-container">
+            <div class="header-title">
+                <svg id="header-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path fill-rule="evenodd" clip-rule="evenodd" d="M11 2a1 1 0 0 1 2 0v2.062A8.004 8.004 0 0 1 19.938 11H22a1 1 0 0 1 0 2h-2.062A8.004 8.004 0 0 1 13 19.938V22a1 1 0 0 1-2 0v-2.062A8.004 8.004 0 0 1 4.062 13H2a1 1 0 0 1 0-2h2.062A8.004 8.004 0 0 1 11 4.062V2zm7 10a6 6 0 1 0-12 0 6 6 0 0 0 12 0zm-3 0a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" fill="#38bdf8"></path></g></svg>
+                <h1>BATTLESHIP</h1>
+            </div>
+            <div class="header-turn">
+                <svg class="gameboard-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path fill-rule="evenodd" clip-rule="evenodd" d="M11 2a1 1 0 0 1 2 0v2.062A8.004 8.004 0 0 1 19.938 11H22a1 1 0 0 1 0 2h-2.062A8.004 8.004 0 0 1 13 19.938V22a1 1 0 0 1-2 0v-2.062A8.004 8.004 0 0 1 4.062 13H2a1 1 0 0 1 0-2h2.062A8.004 8.004 0 0 1 11 4.062V2zm7 10a6 6 0 1 0-12 0 6 6 0 0 0 12 0zm-3 0a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" fill="#f43f5e"></path></g></svg>
+                <p>YOUR TURN</p>
+            </div>
+            <button id="header-reset">
+                <svg class="gameboard-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2.181a.75.75 0 0 1 1.177-.616l4.432 3.068a.75.75 0 0 1 0 1.234l-4.432 3.068A.75.75 0 0 1 12 8.32V6a7 7 0 1 0 7 7 1 1 0 1 1 2 0 9 9 0 1 1-9-9V2.181z" fill="#38bdf8"></path></g></svg>
+                RESET
+            </button>
+        </span>
+    </header>
+    <main>
+        <div class="game-container">
+            <div class="game-card">
+                <span class="card-title">
+                    <div class="card-desc">
+                        <svg class="gameboard-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M12 22c-1.148 0-3.418-1.362-5.13-3.34C4.44 15.854 3 11.967 3 7a1 1 0 0 1 .629-.929c3.274-1.31 5.88-2.613 7.816-3.903a1 1 0 0 1 1.11 0c1.935 1.29 4.543 2.594 7.816 3.903A1 1 0 0 1 21 7c0 4.968-1.44 8.855-3.87 11.66C15.419 20.637 13.149 22 12 22z" fill="#38bdf8"></path></g></svg>
+                        <h3>FRIENDLY WATERS</h3>
+                    </div>
+                    <div class="card-addon">DEFENSIVE SECTOR</div>
+                </span>
+                <div class="gameboard">
+                    <div class="top-labels">
+                        <span>A</span><span>B</span><span>C</span><span>D</span><span>E</span>
+                        <span>F</span><span>G</span><span>H</span><span>I</span><span>J</span>
+                    </div>
+                    <div class="left-labels">
+                        <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span>
+                        <span>6</span><span>7</span><span>8</span><span>9</span><span>10</span>
+                    </div>
+                    <div class="grid" id="player-board"></div>
                 </div>
-                <div class="left-labels">
-                    <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span>
-                    <span>6</span><span>7</span><span>8</span><span>9</span><span>10</span>
+            </div>
+            <div class="ship-container">
+            </div>
+            <div class="game-card">
+                <span class="card-title">
+                    <div class="card-desc">
+                        <svg class="gameboard-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path fill-rule="evenodd" clip-rule="evenodd" d="M11 2a1 1 0 0 1 2 0v2.062A8.004 8.004 0 0 1 19.938 11H22a1 1 0 0 1 0 2h-2.062A8.004 8.004 0 0 1 13 19.938V22a1 1 0 0 1-2 0v-2.062A8.004 8.004 0 0 1 4.062 13H2a1 1 0 0 1 0-2h2.062A8.004 8.004 0 0 1 11 4.062V2zm7 10a6 6 0 1 0-12 0 6 6 0 0 0 12 0zm-3 0a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" fill="#f43f5e"></path></g></svg>
+                        <h3>ENEMY WATERS</h3>
+                    </div>
+                    <div class="card-addon">TARGETING SECTOR</div>
+                </span>
+                <div class="gameboard">
+                    <div class="top-labels">
+                        <span>A</span><span>B</span><span>C</span><span>D</span><span>E</span>
+                        <span>F</span><span>G</span><span>H</span><span>I</span><span>J</span>
+                    </div>
+                    <div class="left-labels">
+                        <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span>
+                        <span>6</span><span>7</span><span>8</span><span>9</span><span>10</span>
+                    </div>
+                    <div class="grid" id="opponent-board"></div>
                 </div>
-                <div class="grid" id="player-board"></div>
             </div>
         </div>
-        <div class="ship-container">
-        </div>
-        <div class="gameboard">
-            <h3>Enemy waters</h3>
-            <div class="grid-wrapper">
-                <div class="top-labels">
-                    <span>A</span><span>B</span><span>C</span><span>D</span><span>E</span>
-                    <span>F</span><span>G</span><span>H</span><span>I</span><span>J</span>
+        <!-- <div class="game-card">
+            <span class="card-title">
+                <div class="card-desc">
+                    <svg class="gameboard-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M8.293 5.707a1 1 0 0 1 1.414-1.414l6.647 6.646a1.5 1.5 0 0 1 0 2.122l-6.647 6.646a1 1 0 0 1-1.414-1.414L14.586 12 8.293 5.707z" fill="#38bdf8"></path></g></svg>
+                    <h3>TACTICAL FEED</h3>
                 </div>
-                <div class="left-labels">
-                    <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span>
-                    <span>6</span><span>7</span><span>8</span><span>9</span><span>10</span>
-                </div>
-                <div class="grid" id="opponent-board"></div>
-            </div>
-        </div>
+                <div class="card-addon">TACTICAL READOUT</div>
+            </span>
+            <table>
+                <tr><td>Test 1</td></tr>
+                <tr><td>Test 2</td></tr>
+                <tr><td>Test 3</td></tr>
+            </table>
+        </div> -->
     </main>
+    <footer>
+        <span class="header-container">
+            <p>BATTLESHIP GAME PvP/PvE</p>
+            <p>Created by <a href="https://github.com/danbroady">Dan</a></p>
+        </span>
+    </footer>
 </body>
 </html>

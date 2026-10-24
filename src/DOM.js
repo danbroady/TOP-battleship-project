@@ -1,13 +1,33 @@
 // Populate grid
 export function renderBoard(gameboardSelector, playerTurn, isInteractive = false) {
     const grid = document.querySelector(gameboardSelector);
+    const rowLabels = grid.parentNode.querySelectorAll('.left-labels span');
+    const colLabels = grid.parentNode.querySelectorAll('.top-labels span');
     for (let i=0; i<100; i++) {
         // Create cell
         let cell = document.createElement('div');
         cell.classList.add('cell');
+        if (gameboardSelector === '#player-board') {
+            cell.classList.add('player-cell');
+        } else {
+            cell.classList.add('opponent-cell');
+        };
         cell.dataset.row = Math.floor(i/10);
         cell.dataset.col = i%10;
-        // cell.innerText = `[${cell.dataset.row},${cell.dataset.col}]`;
+
+        // Row/Col label highlight event listener
+        cell.addEventListener('mouseenter', (e) => {
+            const row = e.target.dataset.row;
+            const col = e.target.dataset.col;
+            if (rowLabels[row]) rowLabels[row].classList.add('active-label');
+            if (colLabels[col]) colLabels[col].classList.add('active-label');
+        });
+        cell.addEventListener('mouseleave', (e) => {
+            const row = e.target.dataset.row;
+            const col = e.target.dataset.col;
+            if (rowLabels[row]) rowLabels[row].classList.remove('active-label');
+            if (colLabels[col]) colLabels[col].classList.remove('active-label');
+        });
 
         // Click event listener
         if (isInteractive) {
@@ -19,6 +39,7 @@ export function renderBoard(gameboardSelector, playerTurn, isInteractive = false
                     playerTurn(row, col)
                 };
             });
+            
         };
 
         // Append to grid
@@ -53,6 +74,7 @@ export function refreshBoards(playerGameboard, opponentGameboard) {
         cell.classList.remove('miss');
         cell.classList.remove('hit');
         cell.classList.remove('ship');
+        cell.replaceChildren();
     });
 
     // Repaint cells
@@ -63,6 +85,9 @@ export function refreshBoards(playerGameboard, opponentGameboard) {
                 const cell = fleetBoard.querySelector(`[data-row="${row}"][data-col="${col}"]`);
                 if (cell && playerGameboard.grid[row][col].ship !== null) {
                     cell.classList.add('hit');
+                    let explosionIcon = document.createElement('p')
+                    explosionIcon.innerText = "💥";
+                    cell.appendChild(explosionIcon);
                 } else if (cell) {
                     cell.classList.add('miss');
                 };
@@ -71,6 +96,9 @@ export function refreshBoards(playerGameboard, opponentGameboard) {
                 const cell = trackingBoard.querySelector(`[data-row="${row}"][data-col="${col}"]`);
                 if (cell && opponentGameboard.grid[row][col].ship !== null) {
                     cell.classList.add('hit');
+                    let explosionIcon = document.createElement('p')
+                    explosionIcon.innerText = "💥";
+                    cell.appendChild(explosionIcon);
                 } else if (cell) {
                     cell.classList.add('miss');
                 };
