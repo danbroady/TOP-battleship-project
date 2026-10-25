@@ -108,7 +108,82 @@ export function refreshBoards(playerGameboard, opponentGameboard) {
 
 };
 
+export function startButton(callback) {
+    const startBtn = document.querySelector('#start-btn');
+    const setupCard = document.querySelector('.deployment-card');
+    setupCard.style.setProperty('display','flex');
+    
+    startBtn.addEventListener('click', () => {
+        // Set gameplay styling
+        const boards = document.querySelectorAll('.grid');
+        boards.forEach(grid => grid.replaceChildren());
 
+        const headerComplications = document.querySelector('.header-complications');
+        headerComplications.style.setProperty('display','flex');
+
+        setupCard.style.setProperty('display','none');
+
+        // Run startGame() in gameControl.js
+        callback();
+    });
+};
+export function resetButton(callback) {
+    const resetBtn = document.querySelector('#header-reset');
+    resetBtn.addEventListener('click', () => {
+
+        // Set gameplay styling
+        const boards = document.querySelectorAll('.grid');
+        boards.forEach(grid => grid.replaceChildren());
+
+        const headerComplications = document.querySelector('.header-complications');
+        headerComplications.style.setProperty('display','none');
+
+        const setupCard = document.querySelector('.deployment-card');
+        setupCard.style.setProperty('display','flex');
+
+        // Run startGame() in gameControl.js
+        callback;
+    });
+};
+
+
+
+export function renderTurn(player) {
+    const turnContainer = document.querySelector('.header-turn');
+    const turnElem = turnContainer.querySelector('p');
+    const turnSVG = turnContainer.querySelector('svg');
+    
+    turnElem.innerText = `${player.name}'s TURN`
+
+    if (player.computer) {
+        turnSVG.innerHTML = `<g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path fill-rule="evenodd" clip-rule="evenodd" d="M11 2a1 1 0 0 1 2 0v2.062A8.004 8.004 0 0 1 19.938 11H22a1 1 0 0 1 0 2h-2.062A8.004 8.004 0 0 1 13 19.938V22a1 1 0 0 1-2 0v-2.062A8.004 8.004 0 0 1 4.062 13H2a1 1 0 0 1 0-2h2.062A8.004 8.004 0 0 1 11 4.062V2zm7 10a6 6 0 1 0-12 0 6 6 0 0 0 12 0zm-3 0a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" fill="#f43f5e"></path></g>`;
+    } else {
+        turnSVG.innerHTML = `<g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M12 22c-1.148 0-3.418-1.362-5.13-3.34C4.44 15.854 3 11.967 3 7a1 1 0 0 1 .629-.929c3.274-1.31 5.88-2.613 7.816-3.903a1 1 0 0 1 1.11 0c1.935 1.29 4.543 2.594 7.816 3.903A1 1 0 0 1 21 7c0 4.968-1.44 8.855-3.87 11.66C15.419 20.637 13.149 22 12 22z" fill="#38bdf8"></path></g>`;
+    };
+
+};
+
+export function renderModal(player) {
+    return new Promise((resolve) => {
+        const turnModal = document.querySelector('#turn-modal');
+        const modalText = turnModal.querySelector('#player-name');
+        const modalBtn = turnModal.querySelector('button');
+
+        // Show modal
+        turnModal.classList.remove('hidden');
+        
+        // Update player name in modal instructions
+        modalText.innerText = player.name;
+
+        // Enable button to hide modal once device has moved
+        const handleConfirm = () => {
+            turnModal.classList.add('hidden'); // Hide modal
+            modalBtn.removeEventListener('click', handleConfirm); // Clean up event listener
+            resolve();
+        };
+        modalBtn.addEventListener('click', handleConfirm);
+    });
+};
 
 
 export function renderGameover(winner) {

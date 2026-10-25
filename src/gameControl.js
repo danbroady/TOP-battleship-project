@@ -1,6 +1,6 @@
 import { Player } from './player.js'
 import { Ship } from './ship.js'
-import { renderBoard, refreshBoards, renderGameover } from './DOM.js'
+import { renderBoard, refreshBoards, startButton, resetButton, renderTurn, renderModal, renderGameover } from './DOM.js'
 
 let player1;
 let player2;
@@ -10,7 +10,7 @@ let gamePhase = 'setup' // setup / combat / gameover
 
 function startGame(mode = 'pve') {
     gameMode = mode;
-    player1 = new Player('Dan');
+    player1 = new Player('Player 1');
     if (gameMode === 'pve') {
         player2 = new Player('Computer', true, 'easy');
     } else {
@@ -19,6 +19,7 @@ function startGame(mode = 'pve') {
     
     renderBoard('#player-board', null, false);
     renderBoard('#opponent-board', handlePlayerTurn, true);
+
 
     // Populate board
     let carrier1 = new Ship(5)
@@ -34,9 +35,8 @@ function startGame(mode = 'pve') {
     gamePhase = 'combat';    
     refreshBoards(player1.gameboard, player2.gameboard);
 };
-startGame('pve');
 
-function handlePlayerTurn(row, col) {
+async function handlePlayerTurn(row, col) {
     if (gamePhase !== 'combat') return;
 
     // Determine current attacker & defender
@@ -45,24 +45,28 @@ function handlePlayerTurn(row, col) {
 
     if (attacker.computer) return;
 
-    // Place attack (if valid) & render attack onto board
+    // Place attack (if valid) & update gameboards
     const result = attacker.playerAttack(defender.gameboard, [row, col]);
     if (!result) return;
-
     refreshBoards(attacker.gameboard, defender.gameboard);
-    
+
     // Check for win condition
     if (defender.gameboard.isShipsSunk()) {
         gamePhase = 'gameover';
         renderGameover(attacker.name);
-    }
+    };
+    
+    // Show 'swap device' modal prior to swapping boards
+    if (!defender.computer) await renderModal(defender);
 
     // Switch turns & swap boards
     turnControl = turnControl === 'p1' ? 'p2' : 'p1';
-    refreshBoards(defender.gameboard, attacker.gameboard);
+    renderTurn(defender);
+    if (!defender.computer) refreshBoards(defender.gameboard, attacker.gameboard); // Only swap boards if in pvp mode
+    
 
     if (turnControl === 'p2' && player2.computer) {
-        setTimeout(handleComputerTurn(), 500);
+        setTimeout(() => handleComputerTurn(), Math.floor(Math.random()*2500)+1250);
     };
 };
 
@@ -82,5 +86,18 @@ function handleComputerTurn() {
     };
 
     // Switch turns
+    renderTurn(player1);
     turnControl = 'p1';
 };
+
+
+
+
+function initialiseGame(mode) {
+    startButton(() => {
+        startGame(mode)});
+    resetButton(() => {
+        startGame(mode)
+    });
+}
+initialiseGame('pve')

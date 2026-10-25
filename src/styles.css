@@ -60,9 +60,7 @@ header {
 .header-container {
     width: 100%;
     max-width: 1400px;
-    gap: 10px;
     display: flex;
-    flex-direction: row;
     align-items: center;
     justify-content: space-between;
 }
@@ -77,6 +75,11 @@ header {
 h1 {
     font-size: 48px;
     font-weight: 700;
+    letter-spacing: 0.05em;
+}
+.header-complications {
+    display: none;
+    gap: 20px;
 }
 .header-turn {
     display: flex;
@@ -94,9 +97,11 @@ h1 {
     outline: solid 1px #38bdf8;
     color: #38bdf8;
     background-color: rgba(30, 41, 59, 0.6);
+    cursor: pointer;
     transition: 300ms;
 }
 #header-reset:hover {
+    outline: solid 1px #64d0ff;
     background-color: rgba(56, 191, 248, 0.187);
 }
 
@@ -129,6 +134,81 @@ a {
 a:hover {
     text-shadow: 0 0 8px #38bdf8;
 }
+
+
+.deployment-card {
+    background-color: rgba(19, 34, 54, 0.6);
+    margin: 15px auto;
+    min-width: min-content;
+    width: 96%;
+    
+    max-width: 1200px;
+    border-radius: 16px;
+    padding: 10px 20px;
+    outline: solid 1.5px #38bdf8;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+.deployment-card.hidden {
+    display: none;
+}
+#deployment-title {
+    display: flex;
+    gap: 15px;
+}
+#deployment-icon {
+    height: 48px;
+    align-self: center;
+}
+.card-instructions {
+    color: #94a3b8;
+    font-size: 14px;
+    min-width: 200px;
+}
+#rotate-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 12px;
+    border-radius: 6px;
+    transition: 200ms;
+    cursor: pointer;
+    background-color: #111c2e;
+    outline: solid 1px #1e293b;
+    min-width: min-content;
+    transition: 300ms;
+}
+#rotate-btn > p > span {
+    color: #38bdf8;
+    letter-spacing: 0.05em;
+}
+#rotate-btn:hover {
+    background-color: rgba(31, 48, 88, 0.6);
+    outline: solid 1px #334665;
+}
+
+#start-btn {
+    padding: 12px;
+    border-radius: 6px;
+    font-weight: 600px;
+    text-align: center;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    background-color: #0284c7;
+    color: #f8fafc;
+    transition: 200ms;
+}
+#start-btn:hover {
+    background-color: #0ea5e9;
+    box-shadow: 0 0 12px rgba(56, 189, 248, 0.4);
+}
+
+
+
+
 
 main {
     display: flex;
@@ -290,8 +370,6 @@ h3 {
     box-shadow: 0 0 6px #38bdf8;
 }
 
-
-
 .ship {
     background-color: rgba(83, 92, 104, 0.583);
     outline: solid 1px #94a3b8;
@@ -332,13 +410,81 @@ table {
     margin: 10px 0;
     color: #8ba0b0;
 }
-tr {
-    
-}
 td {
     border-bottom: solid 1.5px #1e293b;
     padding: 5px 15px;
 }
+
+
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    background-color: rgba(7, 11, 18, 0.85);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+
+    opacity: 1;
+    transition: 300ms;
+}
+.modal-overlay.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+.modal-card {
+    background-color: #0f172a;
+    border: solid 1px #1e293b;
+    border-radius: 15px;
+    padding: 32px;
+    width: 100%;
+    min-width: 250px;
+    max-width: 450px;
+    text-align: center;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 
+              0 0 15px rgba(6, 182, 212, 0.15);
+}
+
+.modal-icon {
+    height: 120px;
+}
+#modal-title {
+    font-size: 38px;
+    letter-spacing: 0.05em;
+    margin-bottom: 12px;
+}
+#modal-desc {
+    color: #94a3b8;
+    margin-bottom: 24px;
+}
+#player-name {
+    color: #38bdf8;
+    font-weight: 600;
+}
+#turn-btn {
+    width: 80%;
+    padding: 12px;
+    border-radius: 6px;
+    font-weight: 600px;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    background-color: #0284c7;
+    color: #f8fafc;
+    transition: 200ms;
+}
+#turn-btn:hover {
+    background-color: #0ea5e9;
+    box-shadow: 0 0 8px rgba(56, 189, 248, 0.3);
+}
+
+
+
+
+
 
 
 
