@@ -108,6 +108,7 @@ export function refreshBoards(playerGameboard, opponentGameboard) {
 
 };
 
+
 export function startButton(callback) {
     const startBtn = document.querySelector('#start-btn');
     const setupCard = document.querySelector('.deployment-card');
@@ -117,6 +118,9 @@ export function startButton(callback) {
         // Set gameplay styling
         const boards = document.querySelectorAll('.grid');
         boards.forEach(grid => grid.replaceChildren());
+
+        const headerMode = document.querySelector('#header-mode');
+        headerMode.style.setProperty('display','none');
 
         const headerComplications = document.querySelector('.header-complications');
         headerComplications.style.setProperty('display','flex');
@@ -135,6 +139,9 @@ export function resetButton(callback) {
         const boards = document.querySelectorAll('.grid');
         boards.forEach(grid => grid.replaceChildren());
 
+        const headerMode = document.querySelector('#header-mode');
+        headerMode.style.setProperty('display','flex');
+
         const headerComplications = document.querySelector('.header-complications');
         headerComplications.style.setProperty('display','none');
 
@@ -142,7 +149,7 @@ export function resetButton(callback) {
         setupCard.style.setProperty('display','flex');
 
         // Run startGame() in gameControl.js
-        callback;
+        callback();
     });
 };
 
@@ -187,15 +194,43 @@ export function renderModal(player) {
 
 
 export function renderGameover(winner) {
-    const gameContainer = document.querySelector('.game-container');
-    gameContainer.replaceChildren();
+    const gameoverModal = document.querySelector('#gameover-modal');
+    const modalText = gameoverModal.querySelector('#player-name');
+    const modalBtn = gameoverModal.querySelector('button');
 
-    const gameoverMessage = document.createElement('p');
-    const winnerMessage = document.createElement('p');
-    gameoverMessage.textContent = 'GAMEOVER';
-    gameoverMessage.classList.add('gameover');
-    winnerMessage.textContent = `${winner} wins!`;
-   
-    gameContainer.appendChild(gameoverMessage);
-    gameContainer.appendChild(winnerMessage);
+    // Show modal
+    gameoverModal.classList.remove('hidden');
+
+    // Update player name in win message
+    modalText.innerText = winner.name;
+
+    // Enable button to hide modal & go to setup screen
+    const handleConfirm = () => {
+        gameoverModal.classList.add('hidden'); // Hide modal
+        modalBtn.removeEventListener('click', handleConfirm); // Clean up event listener
+        const boards = document.querySelectorAll('.grid');
+        boards.forEach(grid => grid.replaceChildren());
+
+        const headerMode = document.querySelector('#header-mode');
+        headerMode.style.setProperty('display','flex');
+
+        const headerComplications = document.querySelector('.header-complications');
+        headerComplications.style.setProperty('display','none');
+
+        const setupCard = document.querySelector('.deployment-card');
+        setupCard.style.setProperty('display','flex');
+    };
+    modalBtn.addEventListener('click', handleConfirm);
 };
+
+export function modeButton() {
+    const modeBtn = document.querySelector('#header-mode');
+    const modeText = modeBtn.querySelector('span');
+    const modeSVG = modeBtn.querySelector('svg');
+    const computerSVG = `<g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <rect height="7.5" width="12.5" y="5.75" x="1.75"></rect> <path d="m10.75 8.75v1.5m-5.5-1.5v1.5m-.5-7.5 3.25 3 3.25-3"></path> </g>`;
+    const playerSVG = `<g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><circle cx="5" cy="9" r="2.25"></circle><circle cx="11" cy="4" r="2.25"></circle><path d="m7.75 9.25c0-1 .75-3 3.25-3s3.25 2 3.25 3m-12.5 5c0-1 .75-3 3.25-3s3.25 2 3.25 3"></path></g>`;
+    modeBtn.addEventListener('click', () => {
+        modeText.innerText = modeText.innerText === 'PvE' ? 'PvP' : 'PvE';
+        modeSVG.innerHTML = modeSVG.innerHTML === `${computerSVG}` ? `${playerSVG}` : `${computerSVG}`;
+    });
+}

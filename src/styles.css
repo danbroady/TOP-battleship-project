@@ -77,6 +77,26 @@ h1 {
     font-weight: 700;
     letter-spacing: 0.05em;
 }
+#header-mode {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    border-radius: 10px;
+    outline: solid 1px #778395;
+    background-color: rgba(52, 58, 66, 0.583);
+    cursor: pointer;
+    transition: 300ms;
+    letter-spacing: 0.05em;
+}
+#header-mode:hover {
+    background-color: rgba(83, 92, 104, 0.583);
+    outline: solid 1px #94a3b8;
+}
+#header-mode > span {
+    color: #38bdf8;
+    font-weight: 700;
+}
 .header-complications {
     display: none;
     gap: 20px;
@@ -420,9 +440,6 @@ td {
     position: fixed;
     inset: 0;
     z-index: 100;
-    background-color: rgba(7, 11, 18, 0.85);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
 
     display: flex;
     justify-content: center;
@@ -435,6 +452,11 @@ td {
 .modal-overlay.hidden {
     opacity: 0;
     pointer-events: none;
+}
+#turn-modal {
+    background-color: rgba(7, 11, 18, 0.85);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
 }
 .modal-card {
     background-color: #0f172a;
@@ -450,7 +472,9 @@ td {
 }
 
 .modal-icon {
-    height: 120px;
+    height: 140px;
+    font-size: 120px;
+    margin-bottom: 20px;
 }
 #modal-title {
     font-size: 38px;
@@ -482,7 +506,29 @@ td {
 }
 
 
-
+#gameover-modal {
+    background-color: rgba(7, 11, 18, 0.6);
+    backdrop-filter: blur(1px);
+    -webkit-backdrop-filter: blur(1px);
+}
+#gameover-icon {
+    text-shadow: 0 0 15px #f43f5e;
+}
+#gameover-btn {
+    width: 80%;
+    padding: 12px;
+    border-radius: 6px;
+    font-weight: 600px;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    background-color: #b52e44;
+    color: #f8fafc;
+    transition: 200ms;
+}
+#gameover-btn:hover {
+    background-color: #dd3450;
+    box-shadow: 0 0 10px rgba(244, 63, 94, 0.55);
+}
 
 
 

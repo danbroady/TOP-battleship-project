@@ -1,6 +1,6 @@
 import { Player } from './player.js'
 import { Ship } from './ship.js'
-import { renderBoard, refreshBoards, startButton, resetButton, renderTurn, renderModal, renderGameover } from './DOM.js'
+import { renderBoard, refreshBoards, startButton, resetButton, renderTurn, renderModal, renderGameover, modeButton } from './DOM.js'
 
 let player1;
 let player2;
@@ -8,10 +8,10 @@ let gameMode;
 let turnControl = 'p1'; // Player 1 = 'p1' , Player 2 = 'p2'
 let gamePhase = 'setup' // setup / combat / gameover
 
-function startGame(mode = 'pve') {
+function startGame(mode = 'PvE') {
     gameMode = mode;
     player1 = new Player('Player 1');
-    if (gameMode === 'pve') {
+    if (gameMode === 'PvE') {
         player2 = new Player('Computer', true, 'easy');
     } else {
         player2 = new Player('Player 2');
@@ -53,7 +53,7 @@ async function handlePlayerTurn(row, col) {
     // Check for win condition
     if (defender.gameboard.isShipsSunk()) {
         gamePhase = 'gameover';
-        renderGameover(attacker.name);
+        renderGameover(attacker);
     };
     
     // Show 'swap device' modal prior to swapping boards
@@ -66,7 +66,7 @@ async function handlePlayerTurn(row, col) {
     
 
     if (turnControl === 'p2' && player2.computer) {
-        setTimeout(() => handleComputerTurn(), Math.floor(Math.random()*2500)+1250);
+        setTimeout(() => handleComputerTurn(), Math.floor(Math.random()*2500)+1000);
     };
 };
 
@@ -82,7 +82,7 @@ function handleComputerTurn() {
     // Check for computer win condition
     if (player1.gameboard.isShipsSunk()) {
         gamePhase = 'gameover';
-        renderGameover(player2.name);
+        renderGameover(player2);
     };
 
     // Switch turns
@@ -93,11 +93,16 @@ function handleComputerTurn() {
 
 
 
-function initialiseGame(mode) {
+function initialiseGame() {
+    renderBoard('#player-board', null, false);
+    renderBoard('#opponent-board', handlePlayerTurn, true);
+    modeButton();
     startButton(() => {
-        startGame(mode)});
+        const modeBtn = document.querySelector('#header-mode');
+        gameMode = modeBtn.querySelector('span').innerText;
+        startGame(gameMode)});
     resetButton(() => {
-        startGame(mode)
+        startGame(gameMode)
     });
 }
-initialiseGame('pve')
+initialiseGame()
