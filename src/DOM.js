@@ -47,6 +47,9 @@ export function renderBoard(gameboardSelector, playerTurn, isInteractive = false
     };
 };
 
+export function renderDeployment(fleet, callback) {
+};
+
 function renderShips(gameboard) {
     const grid = document.querySelector('#player-board');
     if (!grid) return;
@@ -131,6 +134,12 @@ export function startButton(callback) {
         callback();
     });
 };
+export function enableStartButton() {
+    const startBtn = document.querySelector('#start-btn');
+    if (startBtn) {
+        startBtn.disabled = false;
+    };
+}
 export function resetButton(callback) {
     const resetBtn = document.querySelector('#header-reset');
     resetBtn.addEventListener('click', () => {
@@ -233,4 +242,20 @@ export function modeButton() {
         modeText.innerText = modeText.innerText === 'PvE' ? 'PvP' : 'PvE';
         modeSVG.innerHTML = modeSVG.innerHTML === `${computerSVG}` ? `${playerSVG}` : `${computerSVG}`;
     });
-}
+};
+
+export function orientation(gamePhase) {
+    if (gamePhase === 'setup') {
+        const rotateBtn = document.querySelector('#rotate-btn');
+        const rotateLabel = rotateBtn.querySelector('span');
+        rotateBtn.addEventListener('click', () => {
+            rotateLabel.innerText = rotateLabel.innerText === 'VERTICAL' ? 'HORIZONTAL' : 'VERTICAL';
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key.toUpperCase() === 'R') {
+                rotateLabel.innerText = rotateLabel.innerText === 'VERTICAL' ? 'HORIZONTAL' : 'VERTICAL'
+            };
+        });
+    };
+};
