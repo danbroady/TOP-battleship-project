@@ -1,6 +1,6 @@
 import { Player } from './player.js'
 import { Ship } from './ship.js'
-import { renderBoard, renderDeployment, refreshBoards, startButton, resetButton, renderTurn, renderModal, renderGameover, modeButton, orientation, enableStartButton } from './DOM.js'
+import { renderBoard, refreshBoards, startButton, resetButton, renderTurn, renderModal, renderGameover, modeButton, getOrientation, orientation, toggleStartButton } from './DOM.js'
 
 let player1;
 let player2;
@@ -18,23 +18,7 @@ const fleet = [
 let p1ShipCounter = 0;
 let p2ShipCounter = 0;
 let currentSetupPlayer = 'p1'
-let currentOrientation = 'VERTICAL';
-
-function startGame(mode = 'PvE') {
-    gameMode = mode;
-    gamePhase = 'combat';
-
-    renderBoard('#player-board', null, false);
-    renderBoard('#opponent-board', handlePlayerTurn, true);
-    refreshBoards(player1.gameboard, player2.gameboard);
-
-    // player1 = new Player('Player 1');
-    // if (gameMode === 'PvE') {
-    //     player2 = new Player('Computer', true, 'easy');
-    // } else {
-    //     player2 = new Player('Player 2');
-    // };
-};
+// let currentOrientation = getOrientation();
 
 function handleSetup(row, col) {
     if (gamePhase !== 'setup') return;
@@ -54,7 +38,7 @@ function handleSetup(row, col) {
     for (let i=0; i < currentShip.length; i++) {
         let r = parseInt(row);
         let c = parseInt(col);
-        if (currentOrientation === 'VERTICAL') {
+        if (getOrientation() === 'VERTICAL') {
             r += i;
         } else {
             c += i;
@@ -72,7 +56,7 @@ function handleSetup(row, col) {
             p1ShipCounter++;
             shipCounter = p1ShipCounter;
         } else {
-            p2ShipIndex++;
+            p2ShipCounter++;
             shipCounter = p2ShipCounter;
         };
         refreshBoards(activePlayer.gameboard, opponentBoard);
@@ -91,11 +75,14 @@ async function handleNextSetup() {
             computerDeploy(player2);
         };
         gamePhase = 'combat';
-        enableStartButton();
+        toggleStartButton();
     } else {
         //  PvP mode: player1 has finished, prompt to pass to player2
         currentSetupPlayer = 'p2';
-        document.querySelector('#player-board').replaceChildren();
+        const boards = document.querySelectorAll('.grid');
+        boards.forEach(grid => grid.replaceChildren());
+        renderBoard('#player-board', handleSetup, true);
+        renderBoard('#opponent-board', null, false);
         await renderModal(player2);
         refreshBoards(player2.gameboard, player1.gameboard);
     };
@@ -117,6 +104,15 @@ function computerDeploy(player) {
     });
 };
 
+function startGame(mode = 'PvE') {
+    gameMode = mode;
+    gamePhase = 'combat';
+
+    renderBoard('#player-board', null, false);
+    renderBoard('#opponent-board', handlePlayerTurn, true);
+    refreshBoards(player1.gameboard, player2.gameboard);
+};
+
 async function handlePlayerTurn(row, col) {
     if (gamePhase !== 'combat') return;
 
@@ -134,7 +130,8 @@ async function handlePlayerTurn(row, col) {
     // Check for win condition
     if (defender.gameboard.isShipsSunk()) {
         gamePhase = 'gameover';
-        renderGameover(attacker);
+        renderGameover(attacker, () => initialiseGame());
+        gamePhase = 'setup';
         return;
     };
     
@@ -163,7 +160,8 @@ function handleComputerTurn() {
     // Check for computer win condition
     if (player1.gameboard.isShipsSunk()) {
         gamePhase = 'gameover';
-        renderGameover(player2);
+        renderGameover(player2, () => initialiseGame());
+        gamePhase = 'setup';
         return;
     };
 
@@ -171,8 +169,6 @@ function handleComputerTurn() {
     renderTurn(player1);
     turnControl = 'p1';
 };
-
-
 
 
 function initialiseGame() {
@@ -183,7 +179,7 @@ function initialiseGame() {
 
     player1 = new Player('Player 1');
     const modeBtn = document.querySelector('#header-mode');
-    gameMode = modeBtn ? modeBtn.querySelector('span').innerText : 'PvE';
+    gameMode = modeBtn.querySelector('span').innerText;
     if (gameMode === 'PvE') {
         player2 = new Player('Computer', true, 'easy');
     } else {
@@ -192,17 +188,10 @@ function initialiseGame() {
 
     renderBoard('#player-board', handleSetup, true);
     renderBoard('#opponent-board', null, false);
-
-    modeButton();
-    orientation(gamePhase);
-
-    startButton(() => {
-        // const modeBtn = document.querySelector('#header-mode');
-        // gameMode = modeBtn.querySelector('span').innerText;
-        startGame(gameMode)});
-    resetButton(() => {
-        initialiseGame();
-    });
-    
-}
+};
+modeButton(() => initialiseGame());
+orientation(gamePhase);
+startButton(() => {
+    startGame(gameMode)});
+resetButton(() => initialiseGame());
 initialiseGame();

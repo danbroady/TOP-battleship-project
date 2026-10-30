@@ -1,5 +1,5 @@
 // Populate grid
-export function renderBoard(gameboardSelector, playerTurn, isInteractive = false) {
+export function renderBoard(gameboardSelector, placeCallback, isInteractive = false) {
     const grid = document.querySelector(gameboardSelector);
     const rowLabels = grid.parentNode.querySelectorAll('.left-labels span');
     const colLabels = grid.parentNode.querySelectorAll('.top-labels span');
@@ -35,8 +35,8 @@ export function renderBoard(gameboardSelector, playerTurn, isInteractive = false
                 const row = e.target.dataset.row;
                 const col = e.target.dataset.col;
                 
-                if (playerTurn) {
-                    playerTurn(row, col)
+                if (placeCallback) {
+                    placeCallback(row, col)
                 };
             });
             
@@ -45,9 +45,6 @@ export function renderBoard(gameboardSelector, playerTurn, isInteractive = false
         // Append to grid
         grid.appendChild(cell);
     };
-};
-
-export function renderDeployment(fleet, callback) {
 };
 
 function renderShips(gameboard) {
@@ -111,59 +108,6 @@ export function refreshBoards(playerGameboard, opponentGameboard) {
 
 };
 
-
-export function startButton(callback) {
-    const startBtn = document.querySelector('#start-btn');
-    const setupCard = document.querySelector('.deployment-card');
-    setupCard.style.setProperty('display','flex');
-    
-    startBtn.addEventListener('click', () => {
-        // Set gameplay styling
-        const boards = document.querySelectorAll('.grid');
-        boards.forEach(grid => grid.replaceChildren());
-
-        const headerMode = document.querySelector('#header-mode');
-        headerMode.style.setProperty('display','none');
-
-        const headerComplications = document.querySelector('.header-complications');
-        headerComplications.style.setProperty('display','flex');
-
-        setupCard.style.setProperty('display','none');
-
-        // Run startGame() in gameControl.js
-        callback();
-    });
-};
-export function enableStartButton() {
-    const startBtn = document.querySelector('#start-btn');
-    if (startBtn) {
-        startBtn.disabled = false;
-    };
-}
-export function resetButton(callback) {
-    const resetBtn = document.querySelector('#header-reset');
-    resetBtn.addEventListener('click', () => {
-
-        // Set gameplay styling
-        const boards = document.querySelectorAll('.grid');
-        boards.forEach(grid => grid.replaceChildren());
-
-        const headerMode = document.querySelector('#header-mode');
-        headerMode.style.setProperty('display','flex');
-
-        const headerComplications = document.querySelector('.header-complications');
-        headerComplications.style.setProperty('display','none');
-
-        const setupCard = document.querySelector('.deployment-card');
-        setupCard.style.setProperty('display','flex');
-
-        // Run startGame() in gameControl.js
-        callback();
-    });
-};
-
-
-
 export function renderTurn(player) {
     const turnContainer = document.querySelector('.header-turn');
     const turnElem = turnContainer.querySelector('p');
@@ -202,7 +146,7 @@ export function renderModal(player) {
 };
 
 
-export function renderGameover(winner) {
+export function renderGameover(winner, callback) {
     const gameoverModal = document.querySelector('#gameover-modal');
     const modalText = gameoverModal.querySelector('#player-name');
     const modalBtn = gameoverModal.querySelector('button');
@@ -217,22 +161,66 @@ export function renderGameover(winner) {
     const handleConfirm = () => {
         gameoverModal.classList.add('hidden'); // Hide modal
         modalBtn.removeEventListener('click', handleConfirm); // Clean up event listener
-        const boards = document.querySelectorAll('.grid');
-        boards.forEach(grid => grid.replaceChildren());
 
-        const headerMode = document.querySelector('#header-mode');
-        headerMode.style.setProperty('display','flex');
-
-        const headerComplications = document.querySelector('.header-complications');
-        headerComplications.style.setProperty('display','none');
-
-        const setupCard = document.querySelector('.deployment-card');
-        setupCard.style.setProperty('display','flex');
+        // Show start card & hide reset button / turn indicator
+        swapModeReset('setup');
+        // Run initialiseGame() in gameControl.js
+        callback();
     };
     modalBtn.addEventListener('click', handleConfirm);
 };
 
-export function modeButton() {
+
+function swapModeReset(phase) {
+    const setupCard = document.querySelector('.deployment-card');
+    const headerMode = document.querySelector('#header-mode');
+    const headerComplications = document.querySelector('.header-complications');
+    // Clear grids
+    const boards = document.querySelectorAll('.grid');
+    boards.forEach(grid => grid.replaceChildren());
+
+    if (phase==='setup') { // Setup phase
+        toggleStartButton('disabled');
+        headerMode.style.setProperty('display','flex');
+        headerComplications.style.setProperty('display','none');
+        setupCard.style.setProperty('display','flex');
+    } else { // Combat phase
+        headerMode.style.setProperty('display','none');
+        headerComplications.style.setProperty('display','flex');
+        setupCard.style.setProperty('display','none');
+    };
+};
+export function startButton(callback) {
+    const startBtn = document.querySelector('#start-btn');
+    
+    startBtn.addEventListener('click', () => {
+        // Hide start card & introduce reset button / turn indicator
+        swapModeReset('combat');
+        // Run startGame() in gameControl.js
+        callback();
+    });
+};
+export function toggleStartButton(state = 'enabled') {
+    const startBtn = document.querySelector('#start-btn');
+    if (startBtn) {
+        if (state === 'enabled') {
+            startBtn.disabled = false;
+        } else {
+            startBtn.disabled = true;
+        };
+    };
+};
+export function resetButton(callback) {
+    const resetBtn = document.querySelector('#header-reset');
+    resetBtn.addEventListener('click', () => {
+        // Show start card & hide reset button / turn indicator
+        swapModeReset('setup');
+        // Run initialiseGame() in gameControl.js
+        callback();
+    });
+};
+
+export function modeButton(callback) {
     const modeBtn = document.querySelector('#header-mode');
     const modeText = modeBtn.querySelector('span');
     const modeSVG = modeBtn.querySelector('svg');
@@ -241,9 +229,21 @@ export function modeButton() {
     modeBtn.addEventListener('click', () => {
         modeText.innerText = modeText.innerText === 'PvE' ? 'PvP' : 'PvE';
         modeSVG.innerHTML = modeSVG.innerHTML === `${computerSVG}` ? `${playerSVG}` : `${computerSVG}`;
+        console.log(modeText.innerText);
+        // Clear grids
+        const boards = document.querySelectorAll('.grid');
+        boards.forEach(grid => grid.replaceChildren());
+        // Run initialiseGame() in gameControl.js
+        toggleStartButton('disabled');
+        callback();
     });
 };
 
+export function getOrientation() {
+    const rotateBtn = document.querySelector('#rotate-btn');
+    const rotateLabel = rotateBtn.querySelector('span');
+    return rotateLabel.innerText;
+};
 export function orientation(gamePhase) {
     if (gamePhase === 'setup') {
         const rotateBtn = document.querySelector('#rotate-btn');
@@ -254,7 +254,7 @@ export function orientation(gamePhase) {
 
         document.addEventListener('keydown', (e) => {
             if (e.key.toUpperCase() === 'R') {
-                rotateLabel.innerText = rotateLabel.innerText === 'VERTICAL' ? 'HORIZONTAL' : 'VERTICAL'
+                rotateLabel.innerText = rotateLabel.innerText === 'VERTICAL' ? 'HORIZONTAL' : 'VERTICAL';
             };
         });
     };
