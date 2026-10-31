@@ -1,3 +1,6 @@
+import pveIcon from './resources/svg/pve-icon.svg';
+import pvpIcon from './resources/svg/pvp-icon.svg';
+
 // Populate grid
 export function renderBoard(gameboardSelector, placeCallback, isInteractive = false, gamePhase, previewCallback) {
     const grid = document.querySelector(gameboardSelector);
@@ -256,13 +259,12 @@ export function resetButton(callback) {
 export function modeButton(callback) {
     const modeBtn = document.querySelector('#header-mode');
     const modeText = modeBtn.querySelector('span');
-    const modeSVG = modeBtn.querySelector('svg');
-    const computerSVG = `<g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <rect height="7.5" width="12.5" y="5.75" x="1.75"></rect> <path d="m10.75 8.75v1.5m-5.5-1.5v1.5m-.5-7.5 3.25 3 3.25-3"></path> </g>`;
-    const playerSVG = `<g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><circle cx="5" cy="9" r="2.25"></circle><circle cx="11" cy="4" r="2.25"></circle><path d="m7.75 9.25c0-1 .75-3 3.25-3s3.25 2 3.25 3m-12.5 5c0-1 .75-3 3.25-3s3.25 2 3.25 3"></path></g>`;
-    
+    const modeImg = modeBtn.querySelector('img');
+    modeImg.src = modeText.innerText === 'PvE' ? pveIcon : pvpIcon;
+
     modeBtn.addEventListener('click', () => {
         modeText.innerText = modeText.innerText === 'PvE' ? 'PvP' : 'PvE';
-        modeSVG.innerHTML = modeText.innerText === 'PvE' ? `${computerSVG}` : `${playerSVG}`;
+        modeImg.src = modeText.innerText === 'PvE' ? pveIcon : pvpIcon;
         console.log(modeText.innerText);
         // Clear grids
         const boards = document.querySelectorAll('.grid');

@@ -28,11 +28,19 @@ button {
 }
 
 
+
+/* Debugging */
+
+
+
+
+
 /* Main styling */
 
 body {
     min-height: 100vh;
     width: 100%;
+    min-width: 750px;
     display: flex;
     flex-direction: column;
     background-color: #070b12;
@@ -156,12 +164,17 @@ a:hover {
 }
 
 
+
+.start-container {
+    width: 100%;
+    display: flex;
+    flex-flow: wrap;
+    justify-content: center;
+}
 .deployment-card {
     background-color: rgba(19, 34, 54, 0.6);
-    margin: 15px auto;
-    min-width: min-content;
-    width: 96%;
-    
+    margin: 20px 20px;
+    width: 100%;
     max-width: 1200px;
     border-radius: 16px;
     padding: 10px 20px;
@@ -169,7 +182,7 @@ a:hover {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 20px;
+    gap: 10px;
 }
 .deployment-card.hidden {
     display: none;
@@ -259,6 +272,7 @@ main {
     align-items: center;
 }
 
+
 .card-title {
     width: 100%;
     margin: 0 10px;
@@ -285,6 +299,13 @@ main {
 
 .gameboard-icon {
     height: 22px;
+    width: 22px;
+    flex-shrink: 0;
+}
+img {
+    height: 24px;
+    width: 24px;
+    flex-shrink: 0;
 }
 h3 {
     font-size: 18px;
