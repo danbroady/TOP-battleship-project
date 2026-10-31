@@ -259,9 +259,10 @@ export function modeButton(callback) {
     const modeSVG = modeBtn.querySelector('svg');
     const computerSVG = `<g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <rect height="7.5" width="12.5" y="5.75" x="1.75"></rect> <path d="m10.75 8.75v1.5m-5.5-1.5v1.5m-.5-7.5 3.25 3 3.25-3"></path> </g>`;
     const playerSVG = `<g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><circle cx="5" cy="9" r="2.25"></circle><circle cx="11" cy="4" r="2.25"></circle><path d="m7.75 9.25c0-1 .75-3 3.25-3s3.25 2 3.25 3m-12.5 5c0-1 .75-3 3.25-3s3.25 2 3.25 3"></path></g>`;
+    
     modeBtn.addEventListener('click', () => {
         modeText.innerText = modeText.innerText === 'PvE' ? 'PvP' : 'PvE';
-        modeSVG.innerHTML = modeSVG.innerHTML === `${computerSVG}` ? `${playerSVG}` : `${computerSVG}`;
+        modeSVG.innerHTML = modeText.innerText === 'PvE' ? `${computerSVG}` : `${playerSVG}`;
         console.log(modeText.innerText);
         // Clear grids
         const boards = document.querySelectorAll('.grid');
