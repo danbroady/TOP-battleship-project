@@ -243,6 +243,9 @@ export function toggleStartButton(state = 'enabled') {
 export function resetButton(callback) {
     const resetBtn = document.querySelector('#header-reset');
     resetBtn.addEventListener('click', () => {
+        // Hide any active modal
+        const turnModal = document.querySelector('#turn-modal');
+        turnModal.classList.add('hidden');
         // Show start card & hide reset button / turn indicator
         swapModeReset('setup');
         // Run initialiseGame() in gameControl.js
@@ -263,6 +266,9 @@ export function modeButton(callback) {
         // Clear grids
         const boards = document.querySelectorAll('.grid');
         boards.forEach(grid => grid.replaceChildren());
+        // Hide any active modal
+        const turnModal = document.querySelector('#turn-modal');
+        turnModal.classList.add('hidden');
         // Run initialiseGame() in gameControl.js
         toggleStartButton('disabled');
         callback();
