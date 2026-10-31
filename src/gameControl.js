@@ -1,3 +1,4 @@
+import './styles.css'
 import { Player } from './player.js'
 import { Ship } from './ship.js'
 import { renderBoard, refreshBoards, startButton, resetButton, renderTurn, renderModal, renderGameover, modeButton, getOrientation, orientation, toggleStartButton } from './DOM.js'

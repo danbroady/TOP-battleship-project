@@ -2,7 +2,7 @@
   "name": "TOP-battleship-project",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "gameControl.js",
   "scripts": {
     "test": "jest",
     "dev": "webpack serve",

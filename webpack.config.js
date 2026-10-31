@@ -5,7 +5,7 @@ import HtmlWebpackPlugin from "html-webpack-plugin";
 export default {
     mode: "development",
     entry: {
-        main: "./src/index.js"
+        main: "./src/gameControl.js"
         // second: "./src/second-script.js"
     },
     output: {
