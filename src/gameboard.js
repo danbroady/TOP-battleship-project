@@ -14,6 +14,18 @@ export class Gameboard {
     
     placeShip(ship, coordsArray) {
         // Validation
+        if (!this.checkShipPlacement(ship, coordsArray)) return false;
+
+        // Place ship if valid
+        coordsArray.forEach((coord) => {
+            this.grid[coord[0]][coord[1]].ship = ship;
+        });
+        this.ships.push(ship);
+        return true;
+    };
+    // Extra function added to split out checking ship validity & placing the ship (beneficial for DOM.js/gameControl.js's ship preview during setup)
+    checkShipPlacement(ship, coordsArray) {
+        // Validation
         for (let coord of coordsArray) {
             // - out of bounds placement
             if (!this._validateCoords(coord)) {
@@ -27,12 +39,8 @@ export class Gameboard {
         if (coordsArray[0][0] !== coordsArray[1][0] && coordsArray[0][1] !== coordsArray[1][1]) {
                 return false;
         };
-        
-        // Place ship if valid
-        coordsArray.forEach((coord) => {
-            this.grid[coord[0]][coord[1]].ship = ship;
-        });
-        this.ships.push(ship);
+
+        // Otherwise, valid
         return true;
     };
 

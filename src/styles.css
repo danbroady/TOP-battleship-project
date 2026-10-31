@@ -368,7 +368,7 @@ h3 {
     transition: 300ms;
 }
 
-.player-cell:not(.hit):not(.miss):not(.ship):hover {
+.player-cell:not(.hit):not(.miss):not(.ship):not(.ship-preview-valid):not(.ship-preview-invalid):hover {
     background-color: rgba(30, 41, 59, 0.6);
     outline: solid 1px #334665;
 }
@@ -395,20 +395,31 @@ h3 {
     outline: solid 1px #94a3b8;
     box-shadow: inset 0 0 8px rgba(148, 163, 184, 0.25);
 }
-.ship-setup {
+.ship-preview-valid {
     background-color: rgba(83, 92, 104, 0.583);
     outline: dashed 1.5px #94a3b8;
-    animation-name: ship-pulse;
+    animation-name: ship-pulse-valid;
     animation-duration: 3s;
     animation-iteration-count: infinite;
-
 }
-@keyframes ship-pulse {
+@keyframes ship-pulse-valid {
     0% {box-shadow: inset 0 0 4px rgba(148, 163, 184, 0.25);}
     50% {box-shadow: inset 0 0 12px rgba(210, 210, 210, 0.35);}
     100% {box-shadow: inset 0 0 4px rgba(148, 163, 184, 0.25);}
-
 }
+.ship-preview-invalid {
+    background-color: rgba(244, 63, 94, 0.3);
+    outline: dashed 1.5px #f43f5e;
+    animation-name: ship-pulse-invalid;
+    animation-duration: 2.5s;
+    animation-iteration-count: infinite;
+}
+@keyframes ship-pulse-invalid {
+    0% {box-shadow: inset 0 0 4px rgba(219, 104, 123, 0.25);}
+    50% {box-shadow: inset 0 0 10px rgba(241, 158, 172, 0.35);}
+    100% {box-shadow: inset 0 0 4px rgba(219, 104, 123, 0.25);}
+}
+
 .hit {
     outline: solid 1px #f43f5e;
     background-color: rgba(244, 63, 94, 0.3);

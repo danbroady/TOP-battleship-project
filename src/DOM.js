@@ -1,5 +1,5 @@
 // Populate grid
-export function renderBoard(gameboardSelector, placeCallback, isInteractive = false) {
+export function renderBoard(gameboardSelector, placeCallback, isInteractive = false, gamePhase, previewCallback) {
     const grid = document.querySelector(gameboardSelector);
     const rowLabels = grid.parentNode.querySelectorAll('.left-labels span');
     const colLabels = grid.parentNode.querySelectorAll('.top-labels span');
@@ -29,20 +29,51 @@ export function renderBoard(gameboardSelector, placeCallback, isInteractive = fa
             if (colLabels[col]) colLabels[col].classList.remove('active-label');
         });
 
-        // Click event listener
+        // Cell interactions
         if (isInteractive) {
             cell.addEventListener('click', (e) => {
                 const row = e.target.dataset.row;
                 const col = e.target.dataset.col;
                 
+                // If the cell is interactive, clicking will run the callback passed to renderBoard - e.g. handleSetup (ship placement) or handlePlayerTurn (combat turn)
                 if (placeCallback) {
                     placeCallback(row, col)
                 };
             });
-            
+
+            // Ship preview highlight event listener
+            cell.addEventListener('mouseenter', (e) => {
+
+                if (gamePhase !== 'setup' || !previewCallback) return; // Check for setup gamePhase & a player passed in
+                const row = e.target.dataset.row;
+                const col = e.target.dataset.col;
+
+                const shipPreview = previewCallback(row, col);
+                if (!shipPreview) return;
+
+                // Determine styling based on placement validity
+                const cssClass = shipPreview.isValid ? 'ship-preview-valid' : 'ship-preview-invalid';
+
+                // Apply styling
+                for (let i=0; i<shipPreview.length; i++) {
+                    if (getOrientation() === 'VERTICAL') {
+                        const previewCell = grid.querySelector(`[data-row="${(parseInt(row)+i)}"][data-col="${col}"]`);
+                        if (previewCell) previewCell.classList.add(cssClass);
+                    } else {
+                        const previewCell = grid.querySelector(`[data-row="${row}"][data-col="${(parseInt(col)+i)}"]`);
+                        if (previewCell) previewCell.classList.add(cssClass);
+                    };
+                };
+            });
+            cell.addEventListener('mouseleave', (e) => {
+                if (gamePhase !== 'setup' || !previewCallback) return; // Check for setup gamePhase & a player passed inr
+                const cells = document.querySelectorAll('.cell');
+                cells.forEach(cell => cell.classList.remove('ship-preview-valid'));
+                cells.forEach(cell => cell.classList.remove('ship-preview-invalid'));
+            });
         };
 
-        // Append to grid
+        // Append completed cell to grid
         grid.appendChild(cell);
     };
 };
@@ -56,7 +87,6 @@ function renderShips(gameboard) {
             if (gameboard.grid[row][col].ship !== null) {
                 const cell = grid.querySelector(`[data-row="${row}"][data-col="${col}"]`);
                 if (cell) {
-                    cell.innerText = '';
                     cell.classList.add('ship');
                 };
             };

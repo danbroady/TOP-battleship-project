@@ -15,16 +15,13 @@ const fleet = [
     { name: 'submarine', length: 3 },
     { name: 'patrol boat', length: 2 }
 ];
-let p1ShipCounter = 0;
-let p2ShipCounter = 0;
+let shipCounter = 0;
 let currentSetupPlayer = 'p1'
-// let currentOrientation = getOrientation();
 
 function handleSetup(row, col) {
     if (gamePhase !== 'setup') return;
 
     const currentFleet = fleet;
-    let shipCounter = currentSetupPlayer === 'p1' ? p1ShipCounter : p2ShipCounter;
     const activePlayer = currentSetupPlayer === 'p1' ? player1 : player2;
     const opponentBoard = currentSetupPlayer === 'p1' ? player2.gameboard : player1.gameboard;
 
@@ -33,32 +30,16 @@ function handleSetup(row, col) {
 
     const currentShip = currentFleet[shipCounter];
 
-    // Generate coords based on orientation
-    const coords = [];
-    for (let i=0; i < currentShip.length; i++) {
-        let r = parseInt(row);
-        let c = parseInt(col);
-        if (getOrientation() === 'VERTICAL') {
-            r += i;
-        } else {
-            c += i;
-        };
-        coords.push([r,c]);
-    };
+    
+    // Get coordinates
+    const coords = getShipPreview(row, col).coords;
 
     // Create ship object & attempt placement
     const newShip = new Ship(currentShip.length);
     const success = activePlayer.gameboard.placeShip(newShip, coords);
     
     if (success) {
-        // Increment index & refresh board view for new ship
-        if (currentSetupPlayer === 'p1') {
-            p1ShipCounter++;
-            shipCounter = p1ShipCounter;
-        } else {
-            p2ShipCounter++;
-            shipCounter = p2ShipCounter;
-        };
+        shipCounter++;
         refreshBoards(activePlayer.gameboard, opponentBoard);
 
         if (shipCounter >= currentFleet.length) {
@@ -79,9 +60,10 @@ async function handleNextSetup() {
     } else {
         //  PvP mode: player1 has finished, prompt to pass to player2
         currentSetupPlayer = 'p2';
+        shipCounter = 0;
         const boards = document.querySelectorAll('.grid');
         boards.forEach(grid => grid.replaceChildren());
-        renderBoard('#player-board', handleSetup, true);
+        renderBoard('#player-board', handleSetup, true, 'setup', getShipPreview);
         renderBoard('#opponent-board', null, false);
         await renderModal(player2);
         refreshBoards(player2.gameboard, player1.gameboard);
@@ -170,12 +152,37 @@ function handleComputerTurn() {
     turnControl = 'p1';
 };
 
+function getShipPreview(row, col) {
+    // Get current ship being placed & by who
+    const currentShip = fleet[shipCounter];
+    if (!currentShip) return null;
+    const activePlayer = currentSetupPlayer === 'p1' ? player1 : player2;
+
+    // Generate coords based on orientation
+    const coords = [];
+    for (let i=0; i < currentShip.length; i++) {
+        let r = parseInt(row);
+        let c = parseInt(col);
+        if (getOrientation() === 'VERTICAL') {
+            r += i;
+        } else {
+            c += i;
+        };
+        coords.push([r,c]);
+    };
+
+    // Check if ship placement would be valid
+    const isValid = activePlayer.gameboard.checkShipPlacement(new Ship(currentShip.length), coords);
+    return { length: currentShip.length, coords, isValid };
+};
+
+
+
 
 function initialiseGame() {
     gamePhase = 'setup';
     currentSetupPlayer = 'p1';
-    p1ShipCounter = 0;
-    p2ShipCounter = 0;
+    shipCounter = 0;
 
     player1 = new Player('Player 1');
     const modeBtn = document.querySelector('#header-mode');
@@ -186,12 +193,12 @@ function initialiseGame() {
         player2 = new Player('Player 2');
     }
 
-    renderBoard('#player-board', handleSetup, true);
+    renderBoard('#player-board', handleSetup, true, 'setup', getShipPreview);
     renderBoard('#opponent-board', null, false);
 };
+
 modeButton(() => initialiseGame());
 orientation(gamePhase);
-startButton(() => {
-    startGame(gameMode)});
+startButton(() => startGame(gameMode));
 resetButton(() => initialiseGame());
 initialiseGame();
