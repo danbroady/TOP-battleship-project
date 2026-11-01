@@ -211,6 +211,7 @@ function getShipPreview(row, col) {
 function initialiseGame() {
     gamePhase = 'setup';
     currentSetupPlayer = 'p1';
+    turnControl = 'p1';
     shipCounter = 0;
 
     player1 = new Player('Player 1');
@@ -222,7 +223,7 @@ function initialiseGame() {
         player2 = new Player('Player 2');
     }
     
-    // tacticalReadout(); // Clear table
+    renderTurn(player1);
     tacticalReadout('message', gamePhase, 'Setup commenced');
 
     renderBoard('#player-board', handleSetup, true, 'setup', getShipPreview);
