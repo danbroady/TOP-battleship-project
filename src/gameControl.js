@@ -141,7 +141,7 @@ async function handlePlayerTurn(row, col) {
     
     // Show 'swap device' modal prior to swapping boards
     if (!defender.computer) {
-        await wait(2000);
+        // await wait(2000);
         const grid = document.querySelector('#player-board');
         grid.replaceChildren();
         renderBoard('#player-board', null, false);
