@@ -93,7 +93,9 @@ async function startGame(mode = 'PvE') {
     gameMode = mode;
     gamePhase = 'combat';
 
-    await renderModal(player1);
+    if (!player2.computer) {
+        await renderModal(player1);
+    };
 
     tacticalReadout('message', gamePhase, 'Battle commenced!');
 
