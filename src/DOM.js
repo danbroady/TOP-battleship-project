@@ -230,6 +230,9 @@ export function startButton(callback) {
     startBtn.addEventListener('click', () => {
         // Hide start card & introduce reset button / turn indicator
         swapModeReset('combat');
+        // Render boards
+        renderBoard('#player-board', null, false);
+        renderBoard('#opponent-board', null, false);
         // Run startGame() in gameControl.js
         callback();
     });

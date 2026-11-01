@@ -19,6 +19,9 @@ const fleet = [
 let shipCounter = 0;
 let currentSetupPlayer = 'p1'
 
+// Delay helper
+const wait = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
 function handleSetup(row, col) {
     if (gamePhase !== 'setup') return;
 
@@ -89,6 +92,10 @@ function computerDeploy(computer) {
     tacticalReadout('message', gamePhase, `${computer.name} has placed its ships!`);
 };
 
+
+
+
+
 async function startGame(mode = 'PvE') {
     gameMode = mode;
     gamePhase = 'combat';
@@ -99,6 +106,9 @@ async function startGame(mode = 'PvE') {
 
     tacticalReadout('message', gamePhase, 'Battle commenced!');
 
+    // Reset grids
+    const boards = document.querySelectorAll('.grid');
+    boards.forEach(grid => grid.replaceChildren());
     renderBoard('#player-board', null, false);
     renderBoard('#opponent-board', handlePlayerTurn, true);
     refreshBoards(player1.gameboard, player2.gameboard);
@@ -123,13 +133,20 @@ async function handlePlayerTurn(row, col) {
     if (defender.gameboard.isShipsSunk()) {
         gamePhase = 'gameover';
         tacticalReadout('message', gamePhase, `${attacker.name} wins!`);
+        await wait(2000);
         renderGameover(attacker, () => initialiseGame());
         gamePhase = 'setup';
         return;
     };
     
     // Show 'swap device' modal prior to swapping boards
-    if (!defender.computer) await renderModal(defender);
+    if (!defender.computer) {
+        await wait(2000);
+        const grid = document.querySelector('#player-board');
+        grid.replaceChildren();
+        renderBoard('#player-board', null, false);
+        await renderModal(defender);
+    };
 
     // Switch turns & swap boards
     turnControl = turnControl === 'p1' ? 'p2' : 'p1';
@@ -137,11 +154,11 @@ async function handlePlayerTurn(row, col) {
     if (!defender.computer) refreshBoards(defender.gameboard, attacker.gameboard); // Only swap boards if in pvp mode
 
     if (turnControl === 'p2' && player2.computer) {
-        setTimeout(() => handleComputerTurn(), Math.floor(Math.random()*2500)+1000);
+        setTimeout(() => handleComputerTurn(), Math.floor(Math.random()*2500)+500);
     };
 };
 
-function handleComputerTurn() {
+async function handleComputerTurn() {
     if (gamePhase !== 'combat') return;
 
     // Place attack (if valid) & render attack onto board
@@ -155,6 +172,7 @@ function handleComputerTurn() {
     if (player1.gameboard.isShipsSunk()) {
         gamePhase = 'gameover';
         tacticalReadout('message', gamePhase, `${player2.name} ${wins}!`);
+        await wait(2000);
         renderGameover(player2, () => initialiseGame());
         gamePhase = 'setup';
         return;
