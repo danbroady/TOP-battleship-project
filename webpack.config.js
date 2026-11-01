@@ -21,6 +21,7 @@ export default {
     plugins: [
         new HtmlWebpackPlugin({
             template: "./src/index.html",
+            favicon: "./src/resources/svg/target-icon.svg",
             // filename: 'index.html',
             // chunks: ['main'],
         }),

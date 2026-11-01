@@ -9,11 +9,11 @@
     <header>
         <span class="header-container">
             <div class="header-title">
-                <svg id="header-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path fill-rule="evenodd" clip-rule="evenodd" d="M11 2a1 1 0 0 1 2 0v2.062A8.004 8.004 0 0 1 19.938 11H22a1 1 0 0 1 0 2h-2.062A8.004 8.004 0 0 1 13 19.938V22a1 1 0 0 1-2 0v-2.062A8.004 8.004 0 0 1 4.062 13H2a1 1 0 0 1 0-2h2.062A8.004 8.004 0 0 1 11 4.062V2zm7 10a6 6 0 1 0-12 0 6 6 0 0 0 12 0zm-3 0a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" fill="#38bdf8"></path></g></svg>
+                <img id="header-icon">
                 <h1>BATTLESHIP</h1>
             </div>
             <button id="header-mode">
-                <img>
+                <img id="mode-icon">
                 MODE: <span>PvE</span>
             </button>
             <div class="header-complications">
@@ -108,7 +108,7 @@
                 </div>
             </div>
         </div>
-        <!-- <div class="game-card">
+        <div class="game-card" id="tactical-feed-card">
             <span class="card-title">
                 <div class="card-desc">
                     <svg class="gameboard-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M8.293 5.707a1 1 0 0 1 1.414-1.414l6.647 6.646a1.5 1.5 0 0 1 0 2.122l-6.647 6.646a1 1 0 0 1-1.414-1.414L14.586 12 8.293 5.707z" fill="#38bdf8"></path></g></svg>
@@ -116,12 +116,16 @@
                 </div>
                 <div class="card-addon">TACTICAL READOUT</div>
             </span>
-            <table>
-                <tr><td>Test 1</td></tr>
-                <tr><td>Test 2</td></tr>
-                <tr><td>Test 3</td></tr>
-            </table>
-        </div> -->
+            <div class="table-container">
+                <table id="tactical-table">
+                    <colgroup>
+                        <col id="table-col-gamephase">
+                        <col>
+                    </colgroup>
+                    <tr><td></td><td></td></tr>
+                </table>
+            </div>
+        </div>
     </main>
     <footer>
         <span class="header-container">

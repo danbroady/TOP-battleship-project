@@ -1,5 +1,6 @@
 import pveIcon from './resources/svg/pve-icon.svg';
 import pvpIcon from './resources/svg/pvp-icon.svg';
+import gameLogo from './resources/svg/target-icon.svg';
 
 // Populate grid
 export function renderBoard(gameboardSelector, placeCallback, isInteractive = false, gamePhase, previewCallback) {
@@ -259,7 +260,7 @@ export function resetButton(callback) {
 export function modeButton(callback) {
     const modeBtn = document.querySelector('#header-mode');
     const modeText = modeBtn.querySelector('span');
-    const modeImg = modeBtn.querySelector('img');
+    const modeImg = modeBtn.querySelector('#mode-icon');
     modeImg.src = modeText.innerText === 'PvE' ? pveIcon : pvpIcon;
 
     modeBtn.addEventListener('click', () => {
@@ -272,6 +273,7 @@ export function modeButton(callback) {
         // Hide any active modal
         const turnModal = document.querySelector('#turn-modal');
         turnModal.classList.add('hidden');
+        tacticalReadout(); // Clear table
         // Run initialiseGame() in gameControl.js
         toggleStartButton('disabled');
         callback();
@@ -297,4 +299,51 @@ export function orientation(gamePhase) {
             };
         });
     };
+};
+
+
+export function tacticalReadout(request, gamePhase, message) {
+    const table = document.querySelector('#tactical-table');
+
+    if (request!=='message') {
+        const colgroup = table.querySelector('colgroup');
+        table.replaceChildren(colgroup);
+        return;
+    };
+
+    if (message) {
+        // Prevent repeat posts
+        // const prevPosts = table.querySelectorAll('td');
+        // let prevMessage;
+        // if (prevPosts.length > 0) {
+        //     prevMessage = prevPosts[1].innerText;
+        // };
+        // if (message === prevMessage) return;
+
+        // Add unique message
+        const newRow = document.createElement('tr');
+        const newPhase = document.createElement('td');
+        const newMessage = document.createElement('td');
+        newPhase.innerText = `${gamePhase.charAt(0).toUpperCase()}${gamePhase.slice(1)}`;
+        switch(gamePhase) { // setup / combat(default) / gameover
+            case 'setup':
+                newPhase.style.color = '#e2e8f0';
+                break;
+            case 'gameover':
+                newPhase.style.color = '#f43f5e';
+                break;
+            default:
+                newPhase.style.color = '#38bdf8';
+        };
+        newMessage.innerText = message;
+        newRow.appendChild(newPhase);
+        newRow.appendChild(newMessage);
+        table.insertBefore(newRow, table.firstChild)
+    };
+
+};
+
+export function loadLogo() {
+    const headerIcon = document.querySelector('#header-icon');
+    headerIcon.src = gameLogo;
 };

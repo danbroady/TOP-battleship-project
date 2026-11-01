@@ -1,7 +1,7 @@
 import './styles.css'
 import { Player } from './player.js'
 import { Ship } from './ship.js'
-import { renderBoard, refreshBoards, startButton, resetButton, renderTurn, renderModal, renderGameover, modeButton, getOrientation, orientation, toggleStartButton } from './DOM.js'
+import { renderBoard, refreshBoards, startButton, resetButton, renderTurn, renderModal, renderGameover, modeButton, getOrientation, orientation, toggleStartButton, tacticalReadout, loadLogo } from './DOM.js'
 
 let player1;
 let player2;
@@ -42,12 +42,13 @@ function handleSetup(row, col) {
     if (success) {
         shipCounter++;
         refreshBoards(activePlayer.gameboard, opponentBoard);
+        tacticalReadout('message', gamePhase, `${activePlayer.name} placed their ${currentShip.name.charAt(0).toUpperCase()}${currentShip.name.slice(1)}`);
 
         if (shipCounter >= currentFleet.length) {
             handleNextSetup();
         };
     } else {
-        console.log("Invalid placement");
+        tacticalReadout('message', gamePhase, `${activePlayer.name} - invalid ${currentShip.name.charAt(0).toUpperCase()}${currentShip.name.slice(1)} placement`);
     };
 };
 async function handleNextSetup() {
@@ -70,7 +71,7 @@ async function handleNextSetup() {
         refreshBoards(player2.gameboard, player1.gameboard);
     };
 };
-function computerDeploy(player) {
+function computerDeploy(computer) {
     fleet.forEach(ship => {
         let placed = false;
         while (!placed) {
@@ -82,14 +83,19 @@ function computerDeploy(player) {
                 coords.push([vertical ? row+i : row, vertical ? col : col+i]);
             };
             const shipObj = new Ship(ship.length);
-            placed = player.gameboard.placeShip(shipObj, coords);
+            placed = computer.gameboard.placeShip(shipObj, coords);
         };
     });
+    tacticalReadout('message', gamePhase, `${computer.name} has placed its ships!`);
 };
 
-function startGame(mode = 'PvE') {
+async function startGame(mode = 'PvE') {
     gameMode = mode;
     gamePhase = 'combat';
+
+    await renderModal(player1);
+
+    tacticalReadout('message', gamePhase, 'Battle commenced!');
 
     renderBoard('#player-board', null, false);
     renderBoard('#opponent-board', handlePlayerTurn, true);
@@ -107,12 +113,14 @@ async function handlePlayerTurn(row, col) {
 
     // Place attack (if valid) & update gameboards
     const result = attacker.playerAttack(defender.gameboard, [row, col]);
+    tacticalReadout('message', gamePhase, `${attacker.name} ${result}!`);
     if (!result) return;
     refreshBoards(attacker.gameboard, defender.gameboard);
 
     // Check for win condition
     if (defender.gameboard.isShipsSunk()) {
         gamePhase = 'gameover';
+        tacticalReadout('message', gamePhase, `${attacker.name} wins!`);
         renderGameover(attacker, () => initialiseGame());
         gamePhase = 'setup';
         return;
@@ -136,6 +144,7 @@ function handleComputerTurn() {
 
     // Place attack (if valid) & render attack onto board
     const result = player2.computerAttack(player1.gameboard);
+    tacticalReadout('message', gamePhase, `${player2.name} ${result}!`);
     if (!result) return;
     
     refreshBoards(player1.gameboard, player2.gameboard);
@@ -143,6 +152,7 @@ function handleComputerTurn() {
     // Check for computer win condition
     if (player1.gameboard.isShipsSunk()) {
         gamePhase = 'gameover';
+        tacticalReadout('message', gamePhase, `${player2.name} ${wins}!`);
         renderGameover(player2, () => initialiseGame());
         gamePhase = 'setup';
         return;
@@ -178,8 +188,6 @@ function getShipPreview(row, col) {
 };
 
 
-
-
 function initialiseGame() {
     gamePhase = 'setup';
     currentSetupPlayer = 'p1';
@@ -193,11 +201,16 @@ function initialiseGame() {
     } else {
         player2 = new Player('Player 2');
     }
+    
+    // tacticalReadout(); // Clear table
+    tacticalReadout('message', gamePhase, 'Setup commenced');
 
     renderBoard('#player-board', handleSetup, true, 'setup', getShipPreview);
     renderBoard('#opponent-board', null, false);
 };
 
+loadLogo();
+tacticalReadout(); // Clear table
 modeButton(() => initialiseGame());
 orientation(gamePhase);
 startButton(() => startGame(gameMode));
