@@ -590,6 +590,7 @@ table {
 td {
     border-bottom: solid 1.5px #1e293b;
     padding: 5px 15px;
+    font-size: 14px;
 }
 #table-col-gamephase {
     min-width: min-content;
