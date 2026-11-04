@@ -1,28 +1,22 @@
-<h1 align="center">Welcome to TOP - Battleship Project 👋</h1>
-<p>
+<h1 align="center">Welcome to Battleship - A TOP Project 👋</h1>
+<!-- <p align="center">
   <img alt="Version" src="https://img.shields.io/badge/version-1.0.0-blue.svg?cacheSeconds=2592000" />
   <a href="#" target="_blank">
     <img alt="License: ISC" src="https://img.shields.io/badge/License-ISC-yellow.svg" />
   </a>
-</p>
+</p> -->
 
-> A browser-based interpretation of the classic Battleship combat game, completed as part of The Odin Project's JavaScript curriculum. The project features full placement mechanics, including orientation toggling, for fleet deployment. It offers PvE and PvP gameplay with automated turn handling and tactical feed readouts.
+> This is a browser-based interpretation of the classic Battleship combat game, completed as part of The Odin Project's full stack JavaScript curriculum. The project features full placement mechanics, including orientation toggling, for fleet deployment. It offers PvE and PvP gameplay with automated turn handling and tactical feed readouts.
 
-### 🏠 [Homepage](https://github.com/danbroady/TOP-battleship-project)
+### 💻 [GH Repo](https://github.com/danbroady/TOP-battleship-project)
 
-### ✨ [Demo](https://danbroady.github.io/TOP-battleship-project/)
+### 🚀 [Live Demo](https://danbroady.github.io/TOP-battleship-project/)
 
-## Install
-
-```sh
-npm install
-```
-
-## Run tests
-
-```sh
-npm run test
-```
+## Built With
+* **JavaScript (ES6+)** - Game logic, ES6 classes, DOM manipulation, and module pattern
+* **HTML5 / CSS3** - Markup and custom styling (Grid/Flexbox)
+* **Jest** - Test driven development for game logic
+* **Webpack** - Asset bundling
 
 ## Author
 
@@ -30,10 +24,3 @@ npm run test
 
 * Github: [@danbroady](https://github.com/danbroady)
 * LinkedIn: [@danielbroady](https://linkedin.com/in/danielbroady)
-
-## Show your support
-
-Give a ⭐️ if this project helped you!
-
-***
-_This README was generated with ❤️ by [readme-md-generator](https://github.com/kefranabg/readme-md-generator)_
